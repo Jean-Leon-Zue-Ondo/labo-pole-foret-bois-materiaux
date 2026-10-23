@@ -3,13 +3,12 @@ import { RouterLink } from '@angular/router';
 import { PoleStore } from '../../core/store/pole.store';
 import { BandeauActivites } from '../../shared/bandeau-activites';
 import { CarteActualite } from '../../shared/carte-actualite';
-import { CarteAxe } from '../../shared/carte-axe';
 import { CoupeCernes } from '../../shared/coupe-cernes';
 import { Logo } from '../../shared/logo';
 
 @Component({
   selector: 'app-accueil',
-  imports: [RouterLink, BandeauActivites, CarteActualite, CarteAxe, CoupeCernes, Logo],
+  imports: [RouterLink, BandeauActivites, CarteActualite, CoupeCernes, Logo],
   template: `
     <app-bandeau-activites />
 
@@ -46,41 +45,6 @@ import { Logo } from '../../shared/logo';
           }
         </div>
         <a class="toutes-actus" routerLink="/actualites">Toutes les actualités →</a>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="conteneur">
-        <div class="entete-section">
-          <div>
-            <p class="surtitre">Programme scientifique</p>
-            <h2>Cinq axes de recherche</h2>
-          </div>
-          <p>
-            Du peuplement forestier à la chimie de la paroi cellulaire, chaque axe porte sur un maillon de la chaîne du bois.
-            <span class="legende-tons">
-              <span class="ton-foret pastille">forêt</span>
-              <span class="ton-bois pastille">bois</span>
-              <span class="ton-science pastille">science et technologie</span>
-            </span>
-          </p>
-        </div>
-        <div class="grille-axes">
-          @for (axe of store.axes(); track axe.slug) {
-            <app-carte-axe [axe]="axe" />
-          }
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="conteneur bandeau">
-        <div>
-          <p class="surtitre">L'équipe</p>
-          <h2>{{ store.chercheurs().length }} membres répartis sur les cinq axes</h2>
-          <p>Retrouvez chaque chercheur et son secteur de recherche, et filtrez l'équipe par axe.</p>
-        </div>
-        <a class="bouton plein" routerLink="/chercheurs">Voir les chercheurs</a>
       </div>
     </section>
   `,
@@ -132,12 +96,6 @@ import { Logo } from '../../shared/logo';
     .coupe {
       justify-self: center;
     }
-    .legende-tons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 12px;
-    }
     .grille-actus {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
@@ -153,26 +111,6 @@ import { Logo } from '../../shared/logo';
     }
     .toutes-actus:hover {
       text-decoration: underline;
-    }
-    .grille-axes {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-      gap: 18px;
-    }
-    .bandeau {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-    .bandeau > div {
-      display: grid;
-      gap: 10px;
-      max-width: 60ch;
-    }
-    .bandeau p:not(.surtitre) {
-      color: var(--encre-douce);
     }
     @media (max-width: 820px) {
       .grille-ouverture {

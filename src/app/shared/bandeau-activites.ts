@@ -2,25 +2,23 @@ import { Component } from '@angular/core';
 
 interface Tuile {
   legende: string;
-  ton: 'foret' | 'science' | 'bois';
+  fichier: string;
 }
 
 /**
  * Bandeau d'images de référence des activités (type « UMR Silva »), avec le nom du
- * pôle en médaillon central. En l'absence de photographies, chaque tuile affiche
- * une texture CSS tenant lieu d'aperçu.
- *
- * Pour brancher de vraies photos : déposer des fichiers dans `public/assets/bandeau/`
- * (un par tuile, même ordre que `TUILES` ci-dessous) puis, dans le template, remplacer
- * `class="texture ton-{{ t.ton }}"` par `[style.background-image]="'url(/assets/bandeau/' + i + '.jpg)'"`.
+ * pôle en médaillon central. Les photos viennent de `public/assets/bandeau/` ; pour
+ * les remplacer, déposer un nouveau fichier du même nom (ou ajuster `TUILES`
+ * ci-dessous) — aucune autre modification n'est nécessaire.
  */
 @Component({
   selector: 'app-bandeau-activites',
   template: `
-    <div class="bandeau" role="img" aria-label="Aperçus des activités du pôle : terrain, laboratoire et matériaux">
-      @for (t of TUILES; track t.legende) {
+    <div class="bandeau" role="img" aria-label="Aperçus des activités du pôle : sciage, anatomie et chimie du bois">
+      @for (t of TUILES; track t.fichier) {
         <div class="tuile">
-          <div class="texture" [class]="'ton-' + t.ton"></div>
+          <img [src]="'/assets/bandeau/' + t.fichier" [alt]="t.legende" loading="lazy" />
+          <span class="voile" aria-hidden="true"></span>
           <span class="legende">{{ t.legende }}</span>
         </div>
       }
@@ -43,35 +41,18 @@ interface Tuile {
       position: relative;
       overflow: hidden;
     }
-    .texture {
+    .tuile img {
       position: absolute;
-      inset: -10%;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
-    .texture.ton-foret {
-      background:
-        radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--vert) 55%, transparent), transparent 60%),
-        radial-gradient(circle at 70% 70%, color-mix(in srgb, var(--vert-fonce) 65%, transparent), transparent 55%),
-        var(--vert-pale);
-    }
-    .texture.ton-science {
-      background:
-        repeating-linear-gradient(
-          115deg,
-          color-mix(in srgb, var(--bleu) 35%, transparent) 0 10px,
-          transparent 10px 22px
-        ),
-        radial-gradient(circle at 75% 25%, color-mix(in srgb, var(--bleu) 55%, transparent), transparent 60%),
-        var(--bleu-pale);
-    }
-    .texture.ton-bois {
-      background:
-        repeating-radial-gradient(
-          circle at 50% 50%,
-          var(--cerne-initial) 0 6px,
-          var(--cerne-final) 6px 10px
-        ),
-        var(--marron-pale);
-      opacity: 0.9;
+    .voile {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 55%);
     }
     .legende {
       position: absolute;
@@ -112,11 +93,11 @@ interface Tuile {
 })
 export class BandeauActivites {
   protected readonly TUILES: Tuile[] = [
-    { legende: 'Inventaires et placettes', ton: 'foret' },
-    { legende: 'Anatomie du bois', ton: 'bois' },
-    { legende: 'Chimie et polymères', ton: 'science' },
-    { legende: 'Essais et durabilité', ton: 'bois' },
-    { legende: 'Télédétection et SIG', ton: 'science' },
-    { legende: 'Matériaux biosourcés', ton: 'foret' },
+    { legende: 'Sciage et transformation', fichier: 'sciage.jpg' },
+    { legende: 'Anatomie du bois', fichier: 'anatomie.jpg' },
+    { legende: 'Paroi cellulaire du bois', fichier: 'paroi-cellulaire.jpg' },
+    { legende: 'Extraction de la lignine', fichier: 'extraction-lignine.jpg' },
+    { legende: 'Essais de durabilité', fichier: 'essais-durabilite.jpg' },
+    { legende: 'Cernes de croissance', fichier: 'cernes-croissance.jpg' },
   ];
 }

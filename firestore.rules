@@ -1,0 +1,25 @@
+rules_version = '2';
+
+// Règles de sécurité Firestore du site Pôle Forêt-Bois-Matériaux.
+// À coller dans Firebase Console > Firestore Database > Règles.
+//
+// Lecture publique (le site affiche axes, chercheurs et actualités à tout visiteur).
+// Écriture réservée aux membres connectés (espace /admin) : tout chercheur ayant un
+// compte dans Firebase Authentication peut créer, modifier ou supprimer n'importe
+// quelle fiche, conformément au fonctionnement collaboratif du pôle.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /axes/{axeId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /chercheurs/{chercheurId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /actualites/{actualiteId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

@@ -33,7 +33,7 @@ import { Logo } from '../shared/logo';
       </div>
       <div class="conteneur mention">
         <span>Pôle en création · contenus provisoires</span>
-        <span>© {{ annee }} IRAF – IRT, CENAREST</span>
+        <span>© {{ annee }} IRAF – IRT, CENAREST · <a routerLink="/admin">Espace membres</a></span>
       </div>
     </footer>
   `,

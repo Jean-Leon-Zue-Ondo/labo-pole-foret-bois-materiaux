@@ -27,6 +27,12 @@ export interface Chercheur {
   specialites: string[];
   /** Vrai tant que la fiche contient des informations provisoires. */
   aCompleter: boolean;
+  /**
+   * Adresse e-mail du compte de connexion à l'espace membres (/admin), identique à
+   * celle du compte créé dans Firebase Authentication. Vide si le membre n'a pas
+   * encore de compte.
+   */
+  email?: string;
 }
 
 /**

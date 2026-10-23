@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:pole-foret-bois": "node dist/pole-foret-bois/server/server.mjs"
+    "serve:ssr:pole-foret-bois": "node dist/pole-foret-bois/server/server.mjs",
+    "seed:firestore": "tsx scripts/seed-firestore.ts"
   },
   "prettier": {
     "printWidth": 100,
@@ -26,6 +27,7 @@
     "@angular/common": "^20.3.0",
     "@angular/compiler": "^20.3.0",
     "@angular/core": "^20.3.0",
+    "@angular/fire": "^20.1.1",
     "@angular/forms": "^20.3.0",
     "@angular/platform-browser": "^20.3.0",
     "@angular/platform-server": "^20.3.0",
@@ -33,6 +35,7 @@
     "@angular/ssr": "^20.3.41",
     "@ngrx/signals": "^20.1.0",
     "express": "^5.1.0",
+    "firebase": "^11.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -50,6 +53,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "tsx": "^4.23.15",
     "typescript": "~5.9.2"
   }
 }

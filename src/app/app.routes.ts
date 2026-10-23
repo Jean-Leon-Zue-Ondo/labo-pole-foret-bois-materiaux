@@ -22,6 +22,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/actualites/actualites').then((m) => m.Actualites),
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+  },
+  {
     path: 'chercheurs',
     title: 'Chercheurs · Pôle Forêt-Bois-Matériaux',
     loadComponent: () => import('./features/chercheurs/chercheurs').then((m) => m.Chercheurs),

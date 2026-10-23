@@ -9,7 +9,11 @@ import { PoleStore } from '../core/store/pole.store';
   template: `
     <article class="carte">
       <div class="haut">
-        <span class="initiales" aria-hidden="true">{{ initiales() }}</span>
+        @if (chercheur().photo) {
+          <img class="photo" [src]="chercheur().photo" [alt]="'Photo de ' + chercheur().nom" />
+        } @else {
+          <span class="initiales" aria-hidden="true">{{ initiales() }}</span>
+        }
         <div class="ident">
           <h3>{{ chercheur().nom }}</h3>
           <p class="titre">{{ chercheur().titre }} · {{ chercheur().institut }}</p>
@@ -49,11 +53,17 @@ import { PoleStore } from '../core/store/pole.store';
       gap: 12px;
       align-items: center;
     }
-    .initiales {
+    .initiales,
+    .photo {
       flex: none;
       width: 44px;
       height: 44px;
       border-radius: 50%;
+    }
+    .photo {
+      object-fit: cover;
+    }
+    .initiales {
       display: grid;
       place-items: center;
       background: var(--marron-pale);

@@ -33,6 +33,8 @@ export interface Chercheur {
    * encore de compte.
    */
   email?: string;
+  /** URL de la photo (Firebase Storage), ajoutée depuis /admin/chercheurs. */
+  photo?: string;
 }
 
 /**

@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Chercheur, Institut } from '../../core/models/pole.models';
 import { PoleDataService } from '../../core/services/pole-data.service';
+import { StockageService } from '../../core/services/stockage.service';
 import { PoleStore } from '../../core/store/pole.store';
 
 interface ChercheurFormulaire extends Omit<Chercheur, 'specialites'> {
@@ -9,7 +10,7 @@ interface ChercheurFormulaire extends Omit<Chercheur, 'specialites'> {
 }
 
 const VIDE = (): ChercheurFormulaire => ({
-  id: '',
+  id: crypto.randomUUID(),
   nom: '',
   titre: 'Chercheur·e',
   institut: 'IRAF',
@@ -18,6 +19,7 @@ const VIDE = (): ChercheurFormulaire => ({
   specialites: '',
   aCompleter: false,
   email: '',
+  photo: '',
 });
 
 const INSTITUTS: Institut[] = ['IRAF', 'IRT', 'IRAF et IRT'];
@@ -39,6 +41,29 @@ const INSTITUTS: Institut[] = ['IRAF', 'IRT', 'IRAF et IRT'];
         @if (edition(); as c) {
           <form class="fiche" (ngSubmit)="enregistrer()">
             <h2>{{ c.id && dejaExistant(c.id) ? 'Modifier' : 'Nouveau' }} membre</h2>
+
+            <div class="photo">
+              @if (c.photo) {
+                <img [src]="c.photo" [alt]="'Photo de ' + c.nom" />
+              } @else {
+                <span class="photo-vide" aria-hidden="true">{{ c.nom ? c.nom[0] : '?' }}</span>
+              }
+              <div class="photo-actions">
+                <label class="bouton">
+                  {{ photoEnCours() ? 'Envoi…' : 'Choisir une photo' }}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    [disabled]="photoEnCours()"
+                    (change)="surPhotoChoisie($event, c)"
+                  />
+                </label>
+                @if (c.photo) {
+                  <button type="button" class="bouton" (click)="c.photo = ''">Retirer</button>
+                }
+              </div>
+            </div>
 
             <div class="deux">
               <label>
@@ -108,6 +133,11 @@ const INSTITUTS: Institut[] = ['IRAF', 'IRT', 'IRAF et IRT'];
           @for (c of store.chercheurs(); track c.id) {
             <article class="ligne">
               <div>
+                @if (c.photo) {
+                  <img class="miniature" [src]="c.photo" [alt]="'Photo de ' + c.nom" />
+                } @else {
+                  <span class="miniature vide" aria-hidden="true">{{ c.nom[0] }}</span>
+                }
                 <strong>{{ c.nom }}</strong>
                 <span class="meta donnee">{{ c.role }} · {{ c.institut }}</span>
                 @if (c.aCompleter) {
@@ -138,6 +168,37 @@ const INSTITUTS: Institut[] = ['IRAF', 'IRT', 'IRAF et IRT'];
       border-radius: var(--rayon);
     }
     .fiche h2 { font-size: var(--t-l); }
+    .photo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .photo img,
+    .photo-vide {
+      flex: none;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .photo-vide {
+      display: grid;
+      place-items: center;
+      background: var(--marron-pale);
+      color: var(--marron);
+      font-family: var(--f-titre);
+      font-weight: 800;
+      font-size: var(--t-l);
+    }
+    .photo-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .photo-actions .bouton {
+      cursor: pointer;
+      padding: 8px 14px;
+      font-size: var(--t-s);
+    }
     label {
       display: grid;
       gap: 6px;
@@ -204,6 +265,22 @@ const INSTITUTS: Institut[] = ['IRAF', 'IRT', 'IRAF et IRT'];
       min-width: 0;
     }
     .meta { color: var(--encre-douce); }
+    .miniature {
+      flex: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .miniature.vide {
+      display: grid;
+      place-items: center;
+      background: var(--marron-pale);
+      color: var(--marron);
+      font-family: var(--f-titre);
+      font-weight: 800;
+      font-size: var(--t-s);
+    }
     .bouton.danger {
       border-color: #b3261e;
       color: #b3261e;
@@ -220,10 +297,12 @@ const INSTITUTS: Institut[] = ['IRAF', 'IRT', 'IRAF et IRT'];
 export class ChercheursAdmin {
   protected readonly store = inject(PoleStore);
   private readonly data = inject(PoleDataService);
+  private readonly stockage = inject(StockageService);
 
   protected readonly INSTITUTS = INSTITUTS;
   protected readonly edition = signal<ChercheurFormulaire | null>(null);
   protected readonly enCours = signal(false);
+  protected readonly photoEnCours = signal(false);
   protected readonly erreur = signal<string | null>(null);
 
   protected dejaExistant(id: string): boolean {
@@ -242,6 +321,21 @@ export class ChercheursAdmin {
 
   protected basculerSecteur(c: ChercheurFormulaire, slug: string): void {
     c.secteurs = c.secteurs.includes(slug) ? c.secteurs.filter((s) => s !== slug) : [...c.secteurs, slug];
+  }
+
+  protected async surPhotoChoisie(evenement: Event, c: ChercheurFormulaire): Promise<void> {
+    const fichier = (evenement.target as HTMLInputElement).files?.[0];
+    if (!fichier) return;
+    this.erreur.set(null);
+    this.photoEnCours.set(true);
+    try {
+      const extension = fichier.name.split('.').pop() || 'jpg';
+      c.photo = await this.stockage.deposerPhoto(`chercheurs/${c.id}.${extension}`, fichier);
+    } catch {
+      this.erreur.set("Échec de l'envoi de la photo. Réessayez.");
+    } finally {
+      this.photoEnCours.set(false);
+    }
   }
 
   protected annuler(): void {

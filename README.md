@@ -39,6 +39,7 @@ src/app/
     data/actualites.data.ts                 actualités d'exemple (sert à amorcer Firestore)
     services/pole-data.service.ts           lecture/écriture Firestore (axes, chercheurs, actualites)
     services/auth.service.ts                connexion / déconnexion (Firebase Authentication)
+    services/stockage.service.ts            dépôt des photos de chercheurs (Firebase Storage)
     guards/admin.guard.ts                   protège /admin : redirige vers /admin/connexion
     store/pole.store.ts                     NgRx signalStore : axes, chercheurs, actualités, filtres
   layout/entete.ts                          en-tête, menu déroulant « Axes de recherche »
@@ -58,6 +59,7 @@ src/app/
       axes-admin.ts                         idem pour les axes de recherche
 scripts/seed-firestore.ts                   amorce Firestore à partir des contenus d'exemple
 firestore.rules                             règles de sécurité Firestore à coller dans la console
+storage.rules                               règles de sécurité Storage (photos) à coller dans la console
 ```
 
 ## Espace membres (/admin)
@@ -85,9 +87,13 @@ gratuit pour ce volume. Mise en route, à faire une fois :
 5. **Activer Firestore** : *Firestore Database* → *Créer une base de données* (mode
    production, région au choix). Puis onglet *Règles* : coller le contenu de
    `firestore.rules` (lecture publique, écriture réservée aux membres connectés) et publier.
-6. **Amorcer les données** une fois l'étape 2 faite : `npm run seed:firestore` (demande
+6. **Activer Storage** (photos des chercheurs) : *Storage* → *Commencer*. Puis onglet
+   *Règles* : coller le contenu de `storage.rules` (même principe : lecture publique,
+   écriture réservée aux membres connectés, limitée aux images de moins de 5 Mo) et publier.
+7. **Amorcer les données** une fois l'étape 2 faite : `npm run seed:firestore` (demande
    l'e-mail/mot de passe d'un compte créé à l'étape 4) importe les contenus d'exemple du
-   dépôt (`core/data/*.data.ts`) dans Firestore.
+   dépôt (`core/data/*.data.ts`) dans Firestore. Les photos s'ajoutent ensuite une par une
+   depuis `/admin/chercheurs` (bouton « Choisir une photo » sur la fiche de chaque membre).
 
 Ensuite, se connecter sur `/admin/connexion` avec un des comptes créés. Tout membre
 connecté peut tout modifier (actualités, chercheurs, axes), conformément au fonctionnement
@@ -98,10 +104,9 @@ collaboratif voulu pour une petite équipe.
 Le contenu se gère désormais depuis `/admin` (voir ci-dessus), pas en éditant le code.
 Les fichiers `core/data/*.data.ts` ne servent plus qu'à amorcer Firestore une première fois.
 
-- **Bandeau d'images de l'accueil** : par défaut les 6 tuiles de `shared/bandeau-activites.ts`
-  affichent une texture CSS (aucune photo requise pour démarrer). Pour utiliser de vraies
-  photos, déposer 6 fichiers dans `public/assets/bandeau/` et adapter le template du
-  composant comme indiqué dans son commentaire d'en-tête.
+- **Bandeau d'images de l'accueil** : les 6 photos viennent de `public/assets/bandeau/`.
+  Pour les remplacer, déposer un fichier du même nom (ou modifier la liste `TUILES` dans
+  `shared/bandeau-activites.ts` pour changer noms de fichiers/légendes/nombre de tuiles).
 
 ## Charte
 

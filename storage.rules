@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// Règles de sécurité Firebase Storage du site Pôle Forêt-Bois-Matériaux.
+// À coller dans Firebase Console > Storage > Règles.
+//
+// Lecture publique (les photos de chercheurs s'affichent à tout visiteur).
+// Écriture réservée aux membres connectés, limitée aux images de moins de 5 Mo.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /chercheurs/{fichier} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

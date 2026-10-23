@@ -6,6 +6,7 @@ import {
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import {
   provideRouter,
@@ -34,6 +35,7 @@ const providersFirebase = environment.firebase.apiKey
       provideFirebaseApp(() => initializeApp(environment.firebase)),
       provideAuth(() => getAuth()),
       provideFirestore(() => getFirestore()),
+      provideStorage(() => getStorage()),
     ]
   : [];
 

@@ -12,11 +12,11 @@ export const environment = {
    * > Application web > Configuration du SDK. Voir le README, section « Espace membres ».
    */
   firebase: {
-    apiKey: '',
-    authDomain: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: '',
-    appId: '',
+    apiKey: 'AIzaSyBD25AQdaZn1ZIz3mM8NbMhRYZkr4TexHU',
+    authDomain: 'pole-foret-bois.firebaseapp.com',
+    projectId: 'pole-foret-bois',
+    storageBucket: 'pole-foret-bois.firebasestorage.app',
+    messagingSenderId: '1017113466415',
+    appId: '1:1017113466415:web:bc8cdded87a585e04b98da',
   },
 };

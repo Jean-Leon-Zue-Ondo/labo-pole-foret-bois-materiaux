@@ -63,6 +63,7 @@ import { Logo } from '../shared/logo';
             </div>
           </div>
 
+          <a routerLink="/actualites" routerLinkActive="actif">Actualités</a>
           <a routerLink="/chercheurs" routerLinkActive="actif">Chercheurs</a>
           <a routerLink="/contact" routerLinkActive="actif">Contact</a>
         </nav>

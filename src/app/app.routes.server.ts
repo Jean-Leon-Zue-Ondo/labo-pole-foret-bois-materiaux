@@ -6,6 +6,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: '', renderMode: RenderMode.Prerender },
   { path: 'le-pole', renderMode: RenderMode.Prerender },
   { path: 'axes', renderMode: RenderMode.Prerender },
+  { path: 'actualites', renderMode: RenderMode.Prerender },
   {
     path: 'axes/:slug',
     renderMode: RenderMode.Prerender,

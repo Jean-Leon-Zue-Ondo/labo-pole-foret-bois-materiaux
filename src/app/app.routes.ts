@@ -17,6 +17,11 @@ export const routes: Routes = [
     loadChildren: () => import('./features/axes/axes.routes').then((m) => m.AXES_ROUTES),
   },
   {
+    path: 'actualites',
+    title: 'Actualités · Pôle Forêt-Bois-Matériaux',
+    loadComponent: () => import('./features/actualites/actualites').then((m) => m.Actualites),
+  },
+  {
     path: 'chercheurs',
     title: 'Chercheurs · Pôle Forêt-Bois-Matériaux',
     loadComponent: () => import('./features/chercheurs/chercheurs').then((m) => m.Chercheurs),

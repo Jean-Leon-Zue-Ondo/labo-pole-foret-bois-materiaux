@@ -25,6 +25,7 @@ import { Logo } from '../shared/logo';
           <h2>Le pôle</h2>
           <ul>
             <li><a routerLink="/le-pole">Organisation et feuille de route</a></li>
+            <li><a routerLink="/actualites">Actualités</a></li>
             <li><a routerLink="/chercheurs">Chercheurs</a></li>
             <li><a routerLink="/contact">Contact</a></li>
           </ul>

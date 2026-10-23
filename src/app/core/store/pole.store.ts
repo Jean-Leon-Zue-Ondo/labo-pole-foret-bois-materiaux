@@ -1,24 +1,28 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
-import { AxeRecherche, Chercheur } from '../models/pole.models';
+import { Actualite, AxeRecherche, Chercheur } from '../models/pole.models';
 import { PoleDataService } from '../services/pole-data.service';
 
 interface PoleState {
   axes: AxeRecherche[];
   chercheurs: Chercheur[];
+  actualites: Actualite[];
   /** Slug de l'axe sélectionné dans la page Chercheurs, null = tous. */
   secteur: string | null;
   recherche: string;
 }
 
-const etatInitial: PoleState = { axes: [], chercheurs: [], secteur: null, recherche: '' };
+const etatInitial: PoleState = { axes: [], chercheurs: [], actualites: [], secteur: null, recherche: '' };
 
 const normaliser = (t: string) => t.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
 
 export const PoleStore = signalStore(
   { providedIn: 'root' },
   withState(etatInitial),
-  withComputed(({ axes, chercheurs, secteur, recherche }) => ({
+  withComputed(({ axes, chercheurs, actualites, secteur, recherche }) => ({
+    actualitesTriees: computed(() =>
+      [...actualites()].sort((a, b) => b.date.localeCompare(a.date)),
+    ),
     chercheursFiltres: computed(() => {
       const s = secteur();
       const q = normaliser(recherche().trim());
@@ -54,6 +58,7 @@ export const PoleStore = signalStore(
     onInit(store, data = inject(PoleDataService)) {
       data.getAxes().subscribe((axes) => patchState(store, { axes }));
       data.getChercheurs().subscribe((chercheurs) => patchState(store, { chercheurs }));
+      data.getActualites().subscribe((actualites) => patchState(store, { actualites }));
     },
   }),
 );

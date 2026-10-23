@@ -26,18 +26,21 @@ src/app/
   app.ts, app.config.ts, app.routes.ts      coquille, configuration, routes (lazy)
   app.routes.server.ts                      pages pré-rendues (dont les 5 axes)
   core/
-    models/pole.models.ts                   types AxeRecherche, Chercheur
+    models/pole.models.ts                   types AxeRecherche, Chercheur, Actualite
     data/axes.data.ts                       contenu des 5 axes de recherche
     data/chercheurs.data.ts                 équipe (fiches à compléter)
+    data/actualites.data.ts                 fil d'actualités (résumés, vidéos, CR, publications)
     services/pole-data.service.ts           accès aux données (point de branchement API)
-    store/pole.store.ts                     NgRx signalStore : axes, chercheurs, filtres
+    store/pole.store.ts                     NgRx signalStore : axes, chercheurs, actualités, filtres
   layout/entete.ts                          en-tête, menu déroulant « Axes de recherche »
   layout/pied-de-page.ts
-  shared/                                   logo, coupe de cernes (canvas), cartes axe / chercheur
+  shared/                                   logo, bandeau d'activités, coupe de cernes (canvas),
+                                             cartes axe / chercheur / actualité
   features/
     accueil/  pole/  contact/  introuvable/
     axes/     axes.ts (vue d'ensemble), axe-detail.ts (/axes/:slug), axes.routes.ts
     chercheurs/chercheurs.ts                annuaire filtrable (?secteur=slug) + recherche
+    actualites/actualites.ts                fil complet, filtrable par type (/actualites)
 ```
 
 ## Mettre à jour le contenu
@@ -48,6 +51,15 @@ src/app/
   `materiaux-biosources`.
 - **Axes** : éditer `core/data/axes.data.ts`. Un nouvel axe apparaît automatiquement dans le
   menu, l'accueil, l'annuaire et le pré-rendu.
+- **Actualités** (résumés de travaux, vidéos, comptes-rendus de réunion, publications,
+  annonces) : dupliquer un bloc dans `core/data/actualites.data.ts`, lui donner un `id`
+  unique, choisir le `type`, puis passer `aCompleter` à `false`. L'entrée apparaît
+  automatiquement parmi les plus récentes sur l'accueil et dans la liste complète
+  `/actualites` (filtrable par type).
+- **Bandeau d'images de l'accueil** : par défaut les 6 tuiles de `shared/bandeau-activites.ts`
+  affichent une texture CSS (aucune photo requise pour démarrer). Pour utiliser de vraies
+  photos, déposer 6 fichiers dans `public/assets/bandeau/` et adapter le template du
+  composant comme indiqué dans son commentaire d'en-tête.
 - **Brancher une API ou un CMS** : remplacer les `of(...)` de `pole-data.service.ts` par des
   appels `HttpClient` (ajouter `provideHttpClient(withFetch())` dans `app.config.ts`).
   Le store et les pages ne changent pas.

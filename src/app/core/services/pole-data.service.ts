@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { ACTUALITES } from '../data/actualites.data';
 import { AXES } from '../data/axes.data';
 import { CHERCHEURS } from '../data/chercheurs.data';
-import { AxeRecherche, Chercheur } from '../models/pole.models';
+import { Actualite, AxeRecherche, Chercheur } from '../models/pole.models';
 
 /**
  * Accès aux données du pôle.
@@ -18,5 +19,9 @@ export class PoleDataService {
 
   getChercheurs(): Observable<Chercheur[]> {
     return of(CHERCHEURS);
+  }
+
+  getActualites(): Observable<Actualite[]> {
+    return of(ACTUALITES);
   }
 }

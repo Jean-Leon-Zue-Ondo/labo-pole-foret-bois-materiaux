@@ -1,8 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PoleStore } from '../../core/store/pole.store';
+import { BandeauActivites } from '../../shared/bandeau-activites';
+import { CarteActualite } from '../../shared/carte-actualite';
 import { CarteAxe } from '../../shared/carte-axe';
 import { CoupeCernes } from '../../shared/coupe-cernes';
+import { Logo } from '../../shared/logo';
 
 interface Constat {
   chiffre: string;
@@ -13,11 +16,14 @@ interface Constat {
 
 @Component({
   selector: 'app-accueil',
-  imports: [RouterLink, CarteAxe, CoupeCernes],
+  imports: [RouterLink, BandeauActivites, CarteActualite, CarteAxe, CoupeCernes, Logo],
   template: `
+    <app-bandeau-activites />
+
     <section class="ouverture">
       <div class="conteneur grille-ouverture">
         <div>
+          <app-logo [taille]="40" />
           <span class="statut"><i aria-hidden="true"></i>Pôle en création · CENAREST</span>
           <h1>De la forêt de production au <em>matériau bois</em></h1>
           <p class="chapeau">
@@ -29,6 +35,24 @@ interface Constat {
           </div>
         </div>
         <app-coupe-cernes class="coupe" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="conteneur">
+        <div class="entete-section">
+          <div>
+            <p class="surtitre">Suivre le pôle</p>
+            <h2>Actualités</h2>
+          </div>
+          <p>Résumés de travaux, vidéos de séminaires, comptes-rendus de réunion et publications des cinq axes.</p>
+        </div>
+        <div class="grille-actus">
+          @for (a of store.actualitesTriees().slice(0, 4); track a.id) {
+            <app-carte-actualite [actualite]="a" />
+          }
+        </div>
+        <a class="toutes-actus" routerLink="/actualites">Toutes les actualités →</a>
       </div>
     </section>
 
@@ -99,6 +123,9 @@ interface Constat {
       align-items: center;
       padding-block: clamp(40px, 7vw, 88px) 0;
     }
+    app-logo {
+      margin-bottom: 14px;
+    }
     h1 {
       margin-top: 18px;
     }
@@ -168,6 +195,22 @@ interface Constat {
       flex-wrap: wrap;
       gap: 6px;
       margin-top: 12px;
+    }
+    .grille-actus {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+      gap: 18px;
+    }
+    .toutes-actus {
+      display: inline-block;
+      margin-top: 24px;
+      font-family: var(--f-titre);
+      font-weight: 700;
+      color: var(--vert);
+      text-decoration: none;
+    }
+    .toutes-actus:hover {
+      text-decoration: underline;
     }
     .grille-axes {
       display: grid;

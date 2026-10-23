@@ -7,13 +7,6 @@ import { CarteAxe } from '../../shared/carte-axe';
 import { CoupeCernes } from '../../shared/coupe-cernes';
 import { Logo } from '../../shared/logo';
 
-interface Constat {
-  chiffre: string;
-  texte: string;
-  source: string;
-  lien: string;
-}
-
 @Component({
   selector: 'app-accueil',
   imports: [RouterLink, BandeauActivites, CarteActualite, CarteAxe, CoupeCernes, Logo],
@@ -53,30 +46,6 @@ interface Constat {
           }
         </div>
         <a class="toutes-actus" routerLink="/actualites">Toutes les actualités →</a>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="conteneur">
-        <div class="entete-section">
-          <div>
-            <p class="surtitre">Pourquoi ce pôle</p>
-            <h2>La filière s'est industrialisée, la recherche doit suivre</h2>
-          </div>
-          <p>
-            Aucune structure nationale ne couvre aujourd'hui toute la chaîne, de l'arbre sur pied au produit transformé.
-            Industriels, État et bailleurs attendent des données et des solutions sur cette chaîne.
-          </p>
-        </div>
-        <div class="constats">
-          @for (c of constats; track c.chiffre) {
-            <div class="constat">
-              <span class="chiffre donnee">{{ c.chiffre }}</span>
-              <p>{{ c.texte }}</p>
-              <a class="source" [href]="c.lien" target="_blank" rel="noopener">{{ c.source }}</a>
-            </div>
-          }
-        </div>
       </div>
     </section>
 
@@ -163,33 +132,6 @@ interface Constat {
     .coupe {
       justify-self: center;
     }
-    .constats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      border-top: 2px solid var(--encre);
-    }
-    .constat {
-      padding: 22px 24px 24px 0;
-      display: grid;
-      gap: 10px;
-      align-content: start;
-    }
-    .constat + .constat {
-      padding-left: 24px;
-      border-left: 1px solid var(--filet);
-    }
-    .chiffre {
-      font-family: var(--f-titre);
-      font-weight: 800;
-      font-size: var(--t-2xl);
-      color: var(--vert);
-      line-height: 1;
-    }
-    .source {
-      font-family: var(--f-donnee);
-      font-size: 0.78rem;
-      color: var(--encre-douce);
-    }
     .legende-tons {
       display: flex;
       flex-wrap: wrap;
@@ -239,38 +181,9 @@ interface Constat {
       .coupe {
         max-width: 300px;
       }
-      .constats {
-        grid-template-columns: 1fr;
-      }
-      .constat + .constat {
-        padding-left: 0;
-        border-left: 0;
-        border-top: 1px solid var(--filet);
-      }
     }
   `,
 })
 export class Accueil {
   protected readonly store = inject(PoleStore);
-
-  protected readonly constats: Constat[] = [
-    {
-      chiffre: '85 → 217',
-      texte: "unités de transformation du bois entre 2010 et 2023, après l'interdiction d'exporter les grumes.",
-      source: 'EcoMatin, ministère des Forêts',
-      lien: 'https://ecomatin.net/au-gabon-le-nombre-dunites-de-transformation-du-bois-a-augmente-de-61-en-10-ans',
-    },
-    {
-      chiffre: '3,1 Mm³',
-      texte: 'de bois prévus en 2026, en baisse : la valeur ajoutée par mètre cube devient le levier principal.',
-      source: 'Prévisions BEAC, 2026',
-      lien: 'https://gabonmediatime.com/gabon-la-beac-anticipe-un-nouveau-coup-de-frein-de-la-filiere-bois-en-2026/',
-    },
-    {
-      chiffre: '2026-2035',
-      texte: 'nouvelle stratégie CAFI, orientée vers des financements liés aux résultats mesurés en forêt.',
-      source: 'Gabonreview, mai 2026',
-      lien: 'https://www.gabonreview.com/cafi-2026-2035-le-gabon-defend-ses-priorites-forestieres-et-climatiques-a-brazzaville/',
-    },
-  ];
 }

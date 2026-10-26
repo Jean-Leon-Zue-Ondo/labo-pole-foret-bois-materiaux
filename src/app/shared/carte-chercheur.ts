@@ -112,13 +112,12 @@ export class CarteChercheur {
   );
 
   protected readonly initiales = computed(() => {
-    const c = this.chercheur();
-    if (c.aCompleter) return '?';
-    return c.nom
-      .split(/\s+/)
+    const lettres = this.chercheur()
+      .nom.split(/\s+/)
       .filter((m) => /^\p{Lu}/u.test(m))
       .map((m) => m[0])
       .slice(0, 2)
       .join('');
+    return lettres || '?';
   });
 }

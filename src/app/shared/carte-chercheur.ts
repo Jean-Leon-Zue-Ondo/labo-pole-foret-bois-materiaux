@@ -111,13 +111,18 @@ export class CarteChercheur {
       .filter((a) => !!a),
   );
 
+  /**
+   * Convention des fiches : « NOM DE FAMILLE Prénom » (famille en majuscules).
+   * On prend une lettre du nom de famille (premier mot) et une du prénom
+   * (premier mot qui n'est pas tout en majuscules), pas deux lettres du nom.
+   */
   protected readonly initiales = computed(() => {
-    const lettres = this.chercheur()
+    const mots = this.chercheur()
       .nom.split(/\s+/)
-      .filter((m) => /^\p{Lu}/u.test(m))
-      .map((m) => m[0])
-      .slice(0, 2)
-      .join('');
-    return lettres || '?';
+      .filter(Boolean);
+    if (!mots.length) return '?';
+    const estMajusculePur = (m: string) => /\p{L}/u.test(m) && m === m.toLocaleUpperCase('fr-FR');
+    const prenom = mots.find((m, i) => i > 0 && !estMajusculePur(m));
+    return (mots[0][0] + (prenom ?? mots[mots.length - 1])[0]).toLocaleUpperCase('fr-FR');
   });
 }
